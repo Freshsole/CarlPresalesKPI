@@ -1,0 +1,1766 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carl — Presales KPI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --color-purple: #6E3FF3;
+      --color-purple-soft: #F1EDFF;
+      --color-orange: #F06A1D;
+      --color-orange-soft: #FFF4EC;
+      --color-amber-bg: #FFF9EB;
+      --color-amber-border: #FFE2C0;
+      --color-amber-text: #D97706;
+      --color-bg-page: #FAF9F6;
+      --color-bg-surface: #FFFFFF;
+      --color-border: #ECECE8;
+      --color-text-primary: #1E1E24;
+      --color-text-secondary: #88888D;
+      --color-text-muted: #8F9CAE;
+      --color-text-section: #4A5568;
+      --color-grey-soft: #EAEFF5;
+      --color-grey-soft-text: #556B82;
+      --color-avatar-user-bg: #FCA5A5;
+      --color-avatar-user-text: #991B1B;
+      --color-success-bg: #ECFDF5;
+      --color-success-text: #059669;
+      --sidebar-width: 260px;
+      --header-height: 72px;
+      --content-padding: 40px;
+      --content-gap: 24px;
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-logo: 8px;
+      --radius-banner: 10px;
+      --radius-card: 16px;
+      --radius-pill: 100px;
+      --font-family: "Inter", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-family);
+      background: var(--color-bg-page);
+      color: var(--color-text-primary);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--color-bg-surface);
+      min-height: 100vh;
+      padding-top: 24px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 24px 24px 32px;
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      background: var(--color-purple);
+      border-radius: var(--radius-logo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+    }
+
+    .logo-text { display: flex; flex-direction: column; gap: 2px; }
+    .logo-wordmark { font-size: 16px; font-weight: 700; }
+    .logo-tagline {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+
+    .nav-section {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--color-text-section);
+      text-transform: uppercase;
+      padding: 16px 16px 6px 20px;
+    }
+    .nav { display: flex; flex-direction: column; gap: 2px; }
+    .nav-item {
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px 12px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      position: relative;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      font-family: inherit;
+    }
+    .nav-item.active {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    .nav-item.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 3px;
+      height: 42px;
+      background: var(--color-purple);
+    }
+    .nav-item svg { width: 18px; height: 18px; }
+
+    .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+    .top-header {
+      height: var(--header-height);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: var(--color-bg-page);
+    }
+
+    .header-meta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+
+    .profile { display: flex; align-items: center; gap: 10px; }
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--color-avatar-user-bg);
+      color: var(--color-avatar-user-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .profile-name { font-size: 13px; font-weight: 600; }
+    .profile-company { font-size: 11px; color: var(--color-text-secondary); }
+
+    .content {
+      padding: var(--content-padding);
+      display: flex;
+      flex-direction: column;
+      gap: var(--content-gap);
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .title-block h1 { font-size: 28px; font-weight: 700; }
+    .title-block .subtitle {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      margin-top: 4px;
+    }
+    .status-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .badge-brand { background: var(--color-purple-soft); color: var(--color-purple); }
+    .badge-warn { background: var(--color-orange-soft); color: var(--color-orange); }
+    .badge-neutral { background: var(--color-grey-soft); color: var(--color-grey-soft-text); }
+    .badge-success { background: var(--color-success-bg); color: var(--color-success-text); }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-bg-surface);
+      border: 1px dashed var(--color-orange);
+      color: var(--color-orange);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      height: 36px;
+    }
+    .btn-action:hover { background: var(--color-orange-soft); }
+    .btn-action.svg-only { padding: 10px 14px; }
+    .btn-action svg { width: 14px; height: 14px; }
+
+    .date-field {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      padding: 8px 14px;
+      height: 36px;
+    }
+    .date-field label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      white-space: nowrap;
+    }
+    .date-field input {
+      border: none;
+      background: transparent;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      outline: none;
+    }
+
+    .banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--color-amber-bg);
+      border: 1px solid var(--color-amber-border);
+      border-radius: var(--radius-banner);
+      padding: 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-amber-text);
+    }
+    .banner svg { width: 20px; height: 20px; flex-shrink: 0; margin-top: 1px; }
+
+    #results {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 20px 24px;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-top: 8px;
+      line-height: 1.1;
+    }
+    .stat-hint {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      margin-top: 6px;
+    }
+
+    .people-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .person-card {
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .person-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .person-identity { display: flex; align-items: center; gap: 12px; }
+    .person-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--color-purple-soft);
+      color: var(--color-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .person-name { font-size: 16px; font-weight: 700; }
+    .person-kpi { font-size: 13px; color: var(--color-text-secondary); margin-top: 2px; }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    .metric-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+    .metric-value { font-size: 18px; font-weight: 700; margin-top: 4px; }
+
+    .progress-block { display: flex; flex-direction: column; gap: 8px; }
+    .progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+    .progress-track {
+      height: 8px;
+      background: var(--color-grey-soft);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--color-purple);
+      border-radius: var(--radius-pill);
+      transition: width 0.35s ease;
+    }
+    .progress-fill.behind { background: var(--color-orange); }
+    .progress-fill.ahead { background: var(--color-success-text); }
+
+    .page { display: flex; flex-direction: column; gap: var(--content-gap); }
+
+    .settings-card {
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .settings-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .settings-header p {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      margin-top: 6px;
+      line-height: 1.5;
+      max-width: 760px;
+    }
+
+    .settings-meta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+    }
+
+    .fte-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      padding: 14px 16px;
+      background: var(--color-bg-page);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+    }
+    .fte-slider-row label {
+      font-size: 13px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .fte-slider-row input[type="range"] {
+      flex: 1;
+      min-width: 160px;
+      accent-color: var(--color-purple);
+    }
+    .fte-slider-value {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--color-purple);
+      min-width: 140px;
+    }
+    .fte-slider-row select,
+    .fte-slider-row input[type="number"] {
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 8px 10px;
+      outline: none;
+    }
+    .fte-slider-row select { min-width: 220px; }
+    .fte-slider-row input[type="number"] { width: 96px; }
+    .fte-slider-row input[type="number"]:disabled {
+      background: var(--color-bg-page);
+      color: var(--color-text-secondary);
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    .team-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    .team-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--color-border);
+      white-space: nowrap;
+    }
+    .team-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: middle;
+    }
+    .team-table tbody tr:last-child td { border-bottom: none; }
+    .team-table tfoot td {
+      border-top: 1px solid var(--color-border);
+      border-bottom: none;
+      font-weight: 700;
+      padding-top: 16px;
+      background: var(--color-bg-page);
+    }
+
+    .team-table tr.person-hidden td {
+      opacity: 0.4;
+    }
+    .team-table tr.person-hidden td:first-child {
+      text-decoration: line-through;
+    }
+
+    .hide-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      font-family: inherit;
+      font-size: 14px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      color: var(--color-text-muted);
+    }
+    .hide-toggle:hover { background: var(--color-bg-page); }
+    .hide-toggle.is-hidden { color: var(--color-orange); border-color: var(--color-orange); }
+    .team-table .name-cell {
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .team-table select,
+    .team-table input[type="number"] {
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 8px 10px;
+      outline: none;
+      width: 100%;
+      max-width: 160px;
+    }
+    .team-table select:focus,
+    .team-table input[type="number"]:focus {
+      border-color: var(--color-purple);
+    }
+    .team-table input[type="number"]:disabled {
+      background: var(--color-bg-page);
+      color: var(--color-text-secondary);
+    }
+
+    .pace-cell { font-weight: 700; white-space: nowrap; }
+    .pace-ahead { color: var(--color-success-text); }
+    .pace-track { color: var(--color-purple); }
+    .pace-behind { color: var(--color-orange); }
+
+    .empty-card {
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 64px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      text-align: center;
+    }
+    .empty-card h2 { font-size: 18px; font-weight: 700; }
+    .empty-card p {
+      font-size: 14px;
+      color: var(--color-text-secondary);
+      max-width: 420px;
+      line-height: 1.5;
+    }
+    .empty-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--color-purple-soft);
+      color: var(--color-purple);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .empty-icon svg { width: 24px; height: 24px; }
+
+    .file-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .file-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-pill);
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .saved-hint {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-muted);
+    }
+
+    .hidden { display: none !important; }
+
+    .info-tooltip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--color-grey-soft);
+      color: var(--color-grey-soft-text);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: default;
+      vertical-align: middle;
+      margin-left: 8px;
+      flex-shrink: 0;
+    }
+    .info-tooltip .tooltip-box {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-text-primary);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 1.5;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      width: 320px;
+      z-index: 200;
+      white-space: normal;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+      pointer-events: none;
+    }
+    .info-tooltip .tooltip-box::before {
+      content: "";
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 6px solid transparent;
+      border-bottom-color: var(--color-text-primary);
+    }
+    .info-tooltip:hover .tooltip-box { display: block; }
+
+    .detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+    .detail-item {
+      display: grid;
+      grid-template-columns: 90px 1fr auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 13px;
+    }
+    .detail-item:last-child { border-bottom: none; }
+    .detail-date { color: var(--color-text-muted); font-size: 12px; white-space: nowrap; }
+    .detail-subject { font-weight: 500; }
+    .detail-deal { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+    .detail-filter-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .dot-orange { background: var(--color-orange); }
+    .dot-yellow { background: var(--color-amber-border); border: 1px solid var(--color-amber-text); }
+    .dot-red { background: #DC2626; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 30, 36, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 100;
+    }
+    .modal-card {
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      width: min(560px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: calc(100vh - 48px);
+    }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .modal-header h2 {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .modal-hint {
+      font-size: 13px;
+      color: var(--color-text-secondary);
+      line-height: 1.4;
+    }
+    .modal-card textarea {
+      width: 100%;
+      min-height: 280px;
+      resize: vertical;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--color-text-primary);
+      background: var(--color-bg-page);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 14px;
+      outline: none;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1100px) {
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .people-grid { grid-template-columns: 1fr; }
+      .metrics { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 800px) {
+      .sidebar { display: none; }
+      .top-header, .content { padding-left: 20px; padding-right: 20px; }
+      .summary-grid { grid-template-columns: 1fr 1fr; }
+      .empty-card { padding: 40px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-mark">C</div>
+      <div class="logo-text">
+        <span class="logo-wordmark">Carl</span>
+        <span class="logo-tagline">For social business</span>
+      </div>
+    </div>
+    <div class="nav-section">Tools</div>
+    <nav class="nav">
+      <button type="button" class="nav-item active" data-page="dashboard" id="navDashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 3v18h18"/><path d="M7 16l4-4 3 3 5-6"/>
+        </svg>
+        Presales KPI
+      </button>
+      <button type="button" class="nav-item" data-page="settings" id="navSettings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Nastavení týmu
+      </button>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="top-header">
+      <div class="header-meta" id="headerMeta">Nahraj CSV export aktivit</div>
+      <div class="profile">
+        <div class="avatar">PS</div>
+        <div>
+          <div class="profile-name">Presales</div>
+          <div class="profile-company">Carl</div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+      <!-- Dashboard -->
+      <div class="page" id="pageDashboard">
+        <div class="page-header">
+          <div class="title-block">
+            <h1>Presales KPI <span class="info-tooltip">i<span class="tooltip-box">Data se načítají přímo z Pipedrive přes API. Nastavení KPI se ukládají do prohlížeče. Expected = měsíční KPI × (den / dní v měsíci). KPI upravíš v Nastavení týmu.<br/><br/>Oranžová = bez Auto Mailing, Web Forms, Marketplace, Collab&nbsp;&nbsp;|&nbsp;&nbsp;Žlutá = Collab (marketing)</span></span></h1>
+            <p class="subtitle" id="pageSubtitle">Porovnání plnění KPI k danému dni v měsíci</p>
+            <div class="status-row">
+              <span class="badge badge-brand" id="dayBadge">Den —</span>
+              <span class="badge badge-neutral" id="fileBadge">0 aktivit</span>
+            </div>
+          </div>
+          <div class="actions">
+            <div class="date-field">
+              <label for="refDate">Referenční den</label>
+              <input type="date" id="refDate" />
+            </div>
+            <button type="button" class="btn-action" id="fetchBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+              </svg>
+              <span id="fetchBtnLabel">Načíst z Pipedrive</span>
+            </button>
+            <button type="button" class="btn-action" id="exportSlackBtn" title="Zkopírovat Slack report">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Export Slack
+            </button>
+          </div>
+        </div>
+
+        <div class="banner">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <div>
+            Klikni na <strong>Načíst z Pipedrive</strong> pro aktuální data. Výsledky se přepočítají podle referenčního dne.
+          </div>
+        </div>
+
+
+        <div class="empty-card" id="emptyState">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <h2>Zatím žádná data</h2>
+          <p>Klikni na <strong>Načíst z Pipedrive</strong>. Spočítáme plnění KPI k vybranému dni. Nastavení zůstanou uložená.</p>
+          <button type="button" class="btn-action" id="fetchBtnEmpty">Načíst z Pipedrive</button>
+        </div>
+
+        <div id="results" class="hidden">
+          <div class="summary-grid" id="summaryGrid"></div>
+          <div class="people-grid" id="peopleGrid"></div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="page hidden" id="pageSettings">
+        <div class="page-header">
+          <div class="title-block">
+            <h1>Nastavení týmu</h1>
+            <p class="subtitle">Úvazek, KPI cíle a režim výpočtu pro každého</p>
+          </div>
+        </div>
+
+        <section class="settings-card">
+          <div class="settings-header">
+            <h2>Presales tým</h2>
+            <p>
+              Lidé s aktivitou Transfered za referenční měsíc. U každého zvlášť zvolíte,
+              jestli zadáváte úvazek (KPI cíl se dopočítá), nebo KPI cíl (úvazek se dopočítá).
+              Naplnění = Transfered ÷ expected k referenčnímu dni.
+            </p>
+          </div>
+
+          <div class="settings-meta" id="settingsMeta"></div>
+
+          <div class="fte-slider-row">
+            <label for="fteSlider">1 FTE =</label>
+            <input type="range" id="fteSlider" min="10" max="60" step="1" />
+            <span class="fte-slider-value" id="fteSliderValue">30 Transfered</span>
+          </div>
+
+          <div class="fte-slider-row" id="teamGoalRow">
+            <label for="teamGoalMode">Týmový cíl</label>
+            <select id="teamGoalMode">
+              <option value="auto">Automaticky (součet KPI)</option>
+              <option value="manual">Manuálně</option>
+            </select>
+            <input type="number" id="teamGoalManual" min="0" step="1" value="75" disabled />
+            <span class="fte-slider-value" id="teamGoalHint">součet = —</span>
+          </div>
+
+          <div class="table-wrap">
+            <table class="team-table">
+              <thead>
+                <tr>
+                  <th>Jméno</th>
+                  <th>Režim</th>
+                  <th>Úvazek (FTE)</th>
+                  <th>Transfered</th>
+                  <th>KPI cíl</th>
+                  <th>Naplnění k dni</th>
+                  <th title="Skrýt z KPI výpočtu">Skrýt</th>
+                </tr>
+              </thead>
+              <tbody id="teamTableBody"></tbody>
+              <tfoot id="teamTableFoot"></tfoot>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="detailModal">
+    <div class="modal-card" role="dialog" style="width:min(680px,100%)">
+      <div class="modal-header">
+        <h2 id="detailModalTitle">Aktivity</h2>
+        <button type="button" class="btn-action" id="detailModalClose">Zavřít</button>
+      </div>
+      <p class="modal-hint" id="detailModalHint"></p>
+      <div class="detail-list" id="detailList"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="slackModal">
+    <div class="modal-card" role="dialog" aria-labelledby="slackModalTitle">
+      <div class="modal-header">
+        <h2 id="slackModalTitle">Slack report</h2>
+        <button type="button" class="btn-action" id="slackModalClose">Zavřít</button>
+      </div>
+      <p class="modal-hint">Zpráva je ve formátu Slack mrkdwn. Zkopíruj a vlož do kanálu.</p>
+      <textarea id="slackReportText" readonly rows="16"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn-action" id="slackCopyBtn">Kopírovat do schránky</button>
+      </div>
+      <div class="saved-hint hidden" id="slackCopyStatus">Zkopírováno ✓</div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "carl-presales-kpi-v2";
+    const PD_TOKEN = "bb9dd36c8d41477897c6bd82c0fea567119028b8";
+    const PD_BASE = "https://carldatacompany.pipedrive.com/api";
+
+    // Orange filter: exclude these channel_ids
+    const EXCL_CHANNELS = new Set([135, 136]); // Auto Mailing, Auto Mailing - not serious
+    // Orange filter: exclude these origins
+    const EXCL_ORIGINS = new Set(["WebForms", "Marketplace"]);
+    // Orange filter: exclude deals with label 147 (Collab)
+    const EXCL_LABEL_COLLAB = 147;
+
+    const DEFAULT_PEOPLE = [
+      { name: "Jiří Kolb", mode: "kpi_to_fte", kpi: 20 },
+      { name: "Kristián Keblušek", mode: "kpi_to_fte", kpi: 20 },
+      { name: "Martin Bezemek", mode: "kpi_to_fte", kpi: 20 },
+      { name: "Robert Málek", mode: "kpi_to_fte", kpi: 15 },
+      { name: "Tomáš Korytář", mode: "kpi_to_fte", kpi: 24 },
+    ];
+
+    /** state.activities: Array of { assigned, addTime, dealId, orange, yellow } */
+    let state = createDefaultState();
+
+    const els = {
+      refDate: document.getElementById("refDate"),
+      fetchBtn: document.getElementById("fetchBtn"),
+      fetchBtnLabel: document.getElementById("fetchBtnLabel"),
+      headerMeta: document.getElementById("headerMeta"),
+      pageSubtitle: document.getElementById("pageSubtitle"),
+      dayBadge: document.getElementById("dayBadge"),
+      fileBadge: document.getElementById("fileBadge"),
+      emptyState: document.getElementById("emptyState"),
+      results: document.getElementById("results"),
+      summaryGrid: document.getElementById("summaryGrid"),
+      peopleGrid: document.getElementById("peopleGrid"),
+      settingsMeta: document.getElementById("settingsMeta"),
+      fteSlider: document.getElementById("fteSlider"),
+      fteSliderValue: document.getElementById("fteSliderValue"),
+      teamGoalMode: document.getElementById("teamGoalMode"),
+      teamGoalManual: document.getElementById("teamGoalManual"),
+      teamGoalHint: document.getElementById("teamGoalHint"),
+      teamTableBody: document.getElementById("teamTableBody"),
+      teamTableFoot: document.getElementById("teamTableFoot"),
+      pageDashboard: document.getElementById("pageDashboard"),
+      pageSettings: document.getElementById("pageSettings"),
+      navDashboard: document.getElementById("navDashboard"),
+      navSettings: document.getElementById("navSettings"),
+      exportSlackBtn: document.getElementById("exportSlackBtn"),
+      slackModal: document.getElementById("slackModal"),
+      detailModal: document.getElementById("detailModal"),
+      detailModalTitle: document.getElementById("detailModalTitle"),
+      detailModalHint: document.getElementById("detailModalHint"),
+      detailList: document.getElementById("detailList"),
+      slackModalClose: document.getElementById("slackModalClose"),
+      slackReportText: document.getElementById("slackReportText"),
+      slackCopyBtn: document.getElementById("slackCopyBtn"),
+      slackCopyStatus: document.getElementById("slackCopyStatus"),
+    };
+
+    let currentPage = "dashboard";
+
+    function createDefaultState() {
+      const people = {};
+      for (const p of DEFAULT_PEOPLE) {
+        people[p.name] = { mode: p.mode, kpi: p.kpi };
+      }
+      return {
+        meetingsPerFte: 30,
+        refDate: toISODate(new Date()),
+        teamGoalMode: "auto",
+        teamGoalManual: 75,
+        people,
+        activities: [], // { assigned, addTime, dealId, orange, yellow }
+        lastFetched: null,
+      };
+    }
+
+    function pad(n) { return String(n).padStart(2, "0"); }
+
+    function toISODate(d) {
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+    }
+
+    function parseISODate(str) {
+      const [y, m, day] = str.split("-").map(Number);
+      return new Date(y, m - 1, day);
+    }
+
+    function daysInMonth(year, monthIndex) {
+      return new Date(year, monthIndex + 1, 0).getDate();
+    }
+
+    function formatNum(n, digits = 1) {
+      if (!Number.isFinite(n)) return "—";
+      return n.toLocaleString("cs-CZ", {
+        minimumFractionDigits: digits,
+        maximumFractionDigits: digits,
+      });
+    }
+
+    function formatPct(n) {
+      if (!Number.isFinite(n)) return "—";
+      return `${Math.round(n)} %`;
+    }
+
+    function formatDateCs(d) {
+      return d.toLocaleDateString("cs-CZ", { day: "numeric", month: "long", year: "numeric" });
+    }
+
+    function formatMonthCs(d) {
+      return d.toLocaleDateString("cs-CZ", { month: "long", year: "numeric" });
+    }
+
+    function initials(name) {
+      return name.split(/\s+/).filter(Boolean).map((p) => p[0]).slice(0, 2).join("").toUpperCase();
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    function round2(n) { return Math.round(n * 100) / 100; }
+
+    function resolvePerson(name, cfg, meetingsPerFte) {
+      const mode = cfg.mode === "fte_to_kpi" ? "fte_to_kpi" : "kpi_to_fte";
+      let kpi, fte;
+      if (mode === "fte_to_kpi") {
+        fte = Number(cfg.fte);
+        if (!Number.isFinite(fte) || fte < 0) fte = 0;
+        kpi = round2(fte * meetingsPerFte);
+      } else {
+        kpi = Number(cfg.kpi);
+        if (!Number.isFinite(kpi) || kpi < 0) kpi = 0;
+        fte = meetingsPerFte > 0 ? round2(kpi / meetingsPerFte) : 0;
+      }
+      return { name, mode, kpi, fte };
+    }
+
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return createDefaultState();
+        const parsed = JSON.parse(raw);
+        const base = createDefaultState();
+        const rawPeople = parsed.people || {};
+        const mergedPeople = { ...base.people };
+        for (const [k, v] of Object.entries(rawPeople)) {
+          mergedPeople[k] = { ...mergedPeople[k], ...v };
+        }
+        return {
+          meetingsPerFte: Number(parsed.meetingsPerFte) || 30,
+          refDate: parsed.refDate || base.refDate,
+          teamGoalMode: parsed.teamGoalMode === "manual" ? "manual" : "auto",
+          teamGoalManual: Number.isFinite(Number(parsed.teamGoalManual)) ? Number(parsed.teamGoalManual) : base.teamGoalManual,
+          people: mergedPeople,
+          activities: Array.isArray(parsed.activities) ? parsed.activities : [],
+          lastFetched: parsed.lastFetched || null,
+        };
+      } catch { return createDefaultState(); }
+    }
+
+    // ── Pipedrive API ──────────────────────────────────────────────────────────
+
+    async function pdGet(path, params = {}) {
+      const url = new URL(PD_BASE + path);
+      url.searchParams.set("api_token", PD_TOKEN);
+      for (const [k, v] of Object.entries(params)) url.searchParams.set(k, v);
+      const r = await fetch(url.toString());
+      if (!r.ok) throw new Error(`Pipedrive API error ${r.status}`);
+      return r.json();
+    }
+
+    async function fetchAllPages(path, params = {}) {
+      const items = [];
+      let start = 0;
+      const limit = 500;
+      while (true) {
+        const d = await pdGet(path, { ...params, start, limit });
+        if (!d.success) throw new Error(d.error || "API error");
+        const data = d.data || [];
+        items.push(...data);
+        if (!d.additional_data?.pagination?.more_items_in_collection) break;
+        start += limit;
+      }
+      return items;
+    }
+
+    async function fetchDealsV2ByIds(ids) {
+      if (!ids.length) return {};
+      // v2 supports ids param, fetch in batches of 100
+      const map = {};
+      for (let i = 0; i < ids.length; i += 100) {
+        const batch = ids.slice(i, i + 100);
+        const url = new URL(PD_BASE + "/v2/deals");
+        url.searchParams.set("api_token", PD_TOKEN);
+        url.searchParams.set("ids", batch.join(","));
+        url.searchParams.set("limit", "100");
+        const r = await fetch(url.toString());
+        const d = await r.json();
+        for (const deal of (d.data || [])) {
+          map[deal.id] = deal;
+        }
+      }
+      return map;
+    }
+
+    function dealCategory(deal) {
+      if (!deal) return "orange";
+      const channelId = deal.channel;
+      const origin = deal.origin;
+      const labelIds = deal.label_ids || [];
+      // Collab label takes priority — always yellow regardless of channel/origin
+      if (labelIds.includes(EXCL_LABEL_COLLAB)) return "yellow";
+      if (channelId && EXCL_CHANNELS.has(channelId)) return "red";
+      if (origin && EXCL_ORIGINS.has(origin)) return "red";
+      return "orange";
+    }
+
+    async function fetchFromPipedrive() {
+      const ref = getReferenceParts();
+      const startDate = `${ref.year}-${pad(ref.month + 1)}-01`;
+      const endDate = `${ref.year}-${pad(ref.month + 1)}-${pad(ref.n)}`;
+
+      els.fetchBtnLabel.textContent = "Načítám uživatele…";
+      els.fetchBtn.disabled = true;
+
+      try {
+        // 1. Fetch all active users
+        const usersResp = await pdGet("/v1/users");
+        const activeUsers = (usersResp.data || []).filter(u => u.active_flag);
+
+        // 2. Fetch Transfered activities for each user in parallel
+        els.fetchBtnLabel.textContent = `Načítám aktivity (${activeUsers.length} uživatelů)…`;
+
+        const perUserActivities = await Promise.all(
+          activeUsers.map(u =>
+            fetchAllPages("/v1/activities", {
+              type: "transfered",
+              start_date: startDate,
+              end_date: endDate,
+              user_id: u.id,
+            })
+          )
+        );
+
+        // 3. Merge & deduplicate by composite key
+        const seen = new Set();
+        const rawActivities = [];
+        for (const acts of perUserActivities) {
+          for (const act of acts) {
+            const key = [act.assigned_to_user_id, act.add_time, act.deal_id].join("|");
+            if (seen.has(key)) continue;
+            seen.add(key);
+            rawActivities.push(act);
+          }
+        }
+
+        // 4. Collect unique deal IDs
+        const dealIds = [...new Set(rawActivities.filter(a => a.deal_id).map(a => a.deal_id))];
+        els.fetchBtnLabel.textContent = `Načítám ${dealIds.length} dealů…`;
+
+        // 5. Fetch deal details via v2 for channel/origin/label_ids
+        const dealMap = await fetchDealsV2ByIds(dealIds);
+
+        // 6. Build activity records with orange/yellow flags
+        const activities = rawActivities.map(act => {
+          const deal = act.deal_id ? dealMap[act.deal_id] : null;
+          const category = dealCategory(deal);
+          return {
+            assigned: act.owner_name || String(act.assigned_to_user_id || ""),
+            addTime: act.add_time || "",
+            dealId: act.deal_id || null,
+            subject: act.subject || "",
+            dealTitle: act.deal_title || "",
+            category,
+          };
+        });
+
+        state.activities = activities;
+        state.lastFetched = new Date().toISOString();
+
+        // Ensure new people from API are in state
+        for (const act of activities) {
+          if (act.assigned && !state.people[act.assigned]) {
+            state.people[act.assigned] = { mode: "kpi_to_fte", kpi: state.meetingsPerFte };
+          }
+        }
+
+        saveState();
+        render();
+      } catch (err) {
+        alert("Chyba při načítání z Pipedrive: " + err.message);
+      } finally {
+        els.fetchBtnLabel.textContent = "Načíst z Pipedrive";
+        els.fetchBtn.disabled = false;
+      }
+    }
+
+    // ── Computation ───────────────────────────────────────────────────────────
+
+    function getReferenceParts() {
+      const d = parseISODate(state.refDate);
+      const year = d.getFullYear();
+      const month = d.getMonth();
+      const day = d.getDate();
+      const n = daysInMonth(year, month);
+      const monthKey = `${year}-${pad(month + 1)}`;
+      return { date: d, year, month, day, n, monthKey };
+    }
+
+    function countActuals(monthKey) {
+      const orange = {}, yellow = {}, red = {};
+      let totalOrange = 0, totalYellow = 0, totalRed = 0;
+
+      for (const act of state.activities) {
+        if (!act.addTime.startsWith(monthKey)) continue;
+        const cat = act.category || "orange";
+        if (cat === "orange") totalOrange += 1;
+        else if (cat === "yellow") totalYellow += 1;
+        else totalRed += 1;
+
+        const name = act.assigned;
+        if (!name) continue;
+        if (!(name in orange)) { orange[name] = 0; yellow[name] = 0; red[name] = 0; }
+        if (cat === "orange") orange[name] += 1;
+        else if (cat === "yellow") yellow[name] += 1;
+        else red[name] += 1;
+      }
+      return { orange, yellow, red, totalOrange, totalYellow, totalRed };
+    }
+
+    function statusForPace(pace) {
+      if (!Number.isFinite(pace)) return { label: "—", className: "badge-neutral", paceClass: "" };
+      if (pace >= 110) return { label: "Ahead", className: "badge-success", paceClass: "pace-ahead" };
+      if (pace >= 90) return { label: "On track", className: "badge-brand", paceClass: "pace-track" };
+      return { label: "Behind", className: "badge-warn", paceClass: "pace-behind" };
+    }
+
+    function progressClass(pace) {
+      if (!Number.isFinite(pace)) return "";
+      if (pace >= 110) return "ahead";
+      if (pace < 90) return "behind";
+      return "";
+    }
+
+    function slackStatusEmoji(pace) {
+      if (!Number.isFinite(pace)) return "⚪️";
+      if (pace >= 110) return "✅";
+      if (pace >= 90) return "🟢";
+      return "🟠";
+    }
+
+    function compute() {
+      const ref = getReferenceParts();
+      const counts = countActuals(ref.monthKey);
+      const mpf = state.meetingsPerFte;
+
+      const allPeople = Object.keys(state.people)
+        .sort((a, b) => a.localeCompare(b, "cs"))
+        .map((name) => {
+          const resolved = resolvePerson(name, state.people[name], mpf);
+          const actualOrange = counts.orange[name] || 0;
+          const actualYellow = counts.yellow[name] || 0;
+          const actualRed = counts.red[name] || 0;
+          const expected = resolved.kpi * (ref.day / ref.n);
+          const paceOrange = expected > 0 ? (actualOrange / expected) * 100 : NaN;
+          // paceYellow = orange + collab (yellow) together
+          const paceYellow = expected > 0 ? ((actualOrange + actualYellow) / expected) * 100 : NaN;
+          const monthPctOrange = resolved.kpi > 0 ? (actualOrange / resolved.kpi) * 100 : NaN;
+          const isHidden = !!(state.people[name].hidden);
+          return {
+            ...resolved,
+            actualOrange, actualYellow, actualRed,
+            expected,
+            paceOrange, paceYellow,
+            monthPctOrange,
+            isHidden,
+          };
+        });
+
+      const people = allPeople.filter((p) => !p.isHidden);
+
+      const teamCreditedOrange = people.reduce((s, p) => s + p.actualOrange, 0);
+      const teamCreditedYellow = people.reduce((s, p) => s + p.actualYellow, 0);
+      const teamCreditedRed = people.reduce((s, p) => s + p.actualRed, 0);
+      const teamFte = people.reduce((s, p) => s + p.fte, 0);
+      const sumKpi = people.reduce((s, p) => s + p.kpi, 0);
+      const sumExpected = people.reduce((s, p) => s + p.expected, 0);
+
+      const teamKpi = state.teamGoalMode === "manual" ? Number(state.teamGoalManual) || 0 : sumKpi;
+      const teamExpected = state.teamGoalMode === "manual" ? teamKpi * (ref.day / ref.n) : sumExpected;
+
+      const teamPaceOrange = teamExpected > 0 ? (teamCreditedOrange / teamExpected) * 100 : NaN;
+      const teamPaceYellow = teamExpected > 0 ? ((teamCreditedOrange + teamCreditedYellow) / teamExpected) * 100 : NaN;
+      const teamMonthOrange = teamKpi > 0 ? (teamCreditedOrange / teamKpi) * 100 : NaN;
+      const teamMonthYellow = teamKpi > 0 ? (teamCreditedYellow / teamKpi) * 100 : NaN;
+
+      return {
+        ref,
+        people,
+        allPeople,
+        totalOrange: counts.totalOrange,
+        totalYellow: counts.totalYellow,
+        totalRed: counts.totalRed,
+        teamCreditedOrange,
+        teamCreditedYellow,
+        teamCreditedRed,
+        teamFte,
+        sumKpi,
+        teamKpi,
+        teamExpected,
+        teamPaceOrange,
+        teamPaceYellow,
+        teamMonthOrange,
+        teamMonthYellow,
+      };
+    }
+
+    // ── Rendering ─────────────────────────────────────────────────────────────
+
+    function renderPeopleCards(people) {
+      els.peopleGrid.innerHTML = people.map((p) => {
+        const statusO = statusForPace(p.paceOrange);
+        const statusY = statusForPace(p.paceYellow);
+        const barPctO = Math.min(100, Number.isFinite(p.paceOrange) ? p.paceOrange : 0);
+        const barPctY = Math.min(100, Number.isFinite(p.paceYellow) ? p.paceYellow : 0);
+        return `
+          <article class="person-card" style="cursor:pointer" data-person="${escapeHtml(p.name)}">
+            <div class="person-top">
+              <div class="person-identity">
+                <div class="person-avatar">${escapeHtml(initials(p.name))}</div>
+                <div>
+                  <div class="person-name">${escapeHtml(p.name)}</div>
+                  <div class="person-kpi">Měsíční KPI ${formatNum(p.kpi, 0)} · FTE ${formatNum(p.fte, 2)}</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:6px;flex-direction:column;align-items:flex-end">
+                <span class="badge ${statusO.className}" title="Bez Auto Mailing, Web Forms, Marketplace, Collab">${statusO.label}</span>
+              </div>
+            </div>
+            <div class="metrics">
+              <div>
+                <div class="metric-label">Actual</div>
+                <div class="metric-value">${p.actualOrange}</div>
+              </div>
+              <div>
+                <div class="metric-label" style="color:#D97706">Collab</div>
+                <div class="metric-value" style="color:#D97706">${p.actualYellow}</div>
+              </div>
+              <div>
+                <div class="metric-label">Expected</div>
+                <div class="metric-value">${formatNum(p.expected, 1)}</div>
+              </div>
+              <div>
+                <div class="metric-label">Pace</div>
+                <div class="metric-value">${formatPct(p.paceOrange)}</div>
+              </div>
+            </div>
+            <div class="progress-block">
+              <div class="progress-labels">
+                <span>Plnění vs. expected</span>
+                <span>${formatPct(p.paceOrange)}${p.actualYellow > 0 ? ' <span style="color:#D97706">+' + p.actualYellow + ' Collab = ' + formatPct(p.paceYellow) + '</span>' : ''}</span>
+              </div>
+              <div class="progress-track" style="position:relative">
+                <div class="progress-fill" style="width:${barPctY}%;background:#FDE68A;position:absolute;top:0;left:0;height:100%;z-index:1"></div>
+                <div class="progress-fill ${progressClass(p.paceOrange)}" style="width:${barPctO}%;position:absolute;top:0;left:0;height:100%;z-index:2"></div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderTable(people, allPeople, ref, team) {
+      els.settingsMeta.textContent =
+        `Referenční měsíc: ${formatMonthCs(ref.date)} · 1 FTE = ${state.meetingsPerFte} Transfered · ` +
+        `naplnění k dni ${ref.day}/${ref.n}`;
+
+      els.teamTableBody.innerHTML = allPeople.map((p) => {
+        const statusO = statusForPace(p.paceOrange);
+        const fteDisabled = p.mode === "kpi_to_fte" ? "disabled" : "";
+        const kpiDisabled = p.mode === "fte_to_kpi" ? "disabled" : "";
+        return `
+          <tr data-name="${escapeHtml(p.name)}" class="${p.isHidden ? 'person-hidden' : '' }">
+            <td class="name-cell">${escapeHtml(p.name)}</td>
+            <td>
+              <select data-field="mode">
+                <option value="kpi_to_fte" ${p.mode === "kpi_to_fte" ? "selected" : ""}>KPI → Úvazek</option>
+                <option value="fte_to_kpi" ${p.mode === "fte_to_kpi" ? "selected" : ""}>Úvazek → KPI</option>
+              </select>
+            </td>
+            <td>
+              <input type="number" data-field="fte" min="0" step="0.01" value="${p.fte}" ${fteDisabled} />
+            </td>
+            <td>${p.actualOrange} / ${p.actualYellow}</td>
+            <td>
+              <input type="number" data-field="kpi" min="0" step="1" value="${p.kpi}" ${kpiDisabled} />
+            </td>
+            <td class="pace-cell ${statusO.paceClass}">${formatPct(p.paceOrange)}</td>
+            <td>
+              <button type="button" class="hide-toggle${p.isHidden ? ' is-hidden' : ''}" data-field="hidden" title="${p.isHidden ? 'Zobrazit a počítat' : 'Skrýt z KPI výpočtu'}">
+                ${p.isHidden ? '🙈' : '👁'}
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+
+      els.teamTableFoot.innerHTML = `
+        <tr>
+          <td>Celkem</td>
+          <td></td>
+          <td>${formatNum(team.teamFte, 2)}</td>
+          <td>${team.teamCreditedOrange} / ${team.teamCreditedYellow}</td>
+          <td>
+            ${formatNum(team.teamKpi, 1)}
+            ${state.teamGoalMode === "manual" ? `<div style="font-size:11px;font-weight:500;color:var(--color-text-muted);margin-top:2px">součet ${formatNum(team.sumKpi, 1)}</div>` : ""}
+          </td>
+          <td class="pace-cell ${statusForPace(team.teamPaceOrange).paceClass}">${formatPct(team.teamPaceOrange)}</td>
+          <td></td>
+        </tr>
+      `;
+    }
+
+    function syncTeamGoalControls(sumKpi) {
+      const isManual = state.teamGoalMode === "manual";
+      els.teamGoalMode.value = state.teamGoalMode;
+      els.teamGoalManual.value = String(state.teamGoalManual);
+      els.teamGoalManual.disabled = !isManual;
+      els.teamGoalHint.textContent = isManual
+        ? `platí ${formatNum(state.teamGoalManual, 0)} (součet ${formatNum(sumKpi, 1)})`
+        : `součet = ${formatNum(sumKpi, 1)}`;
+    }
+
+    function render() {
+      const hasData = state.activities.length > 0;
+
+      els.fteSlider.value = String(state.meetingsPerFte);
+      els.fteSliderValue.textContent = `${state.meetingsPerFte} Transfered`;
+      els.refDate.value = state.refDate;
+
+      const data = compute();
+      const { ref, people, allPeople, totalOrange, totalYellow, totalRed, teamCreditedOrange, teamCreditedYellow,
+              teamExpected, teamPaceOrange, teamPaceYellow, teamMonthOrange, teamMonthYellow,
+              teamFte, teamKpi, sumKpi } = data;
+
+      els.dayBadge.textContent = `Den ${ref.day} z ${ref.n}`;
+      els.pageSubtitle.textContent = `Stav k ${formatDateCs(ref.date)} · Expected = KPI × (${ref.day}/${ref.n})`;
+      els.headerMeta.textContent = hasData
+        ? `${totalOrange} oranž${totalYellow > 0 ? ' +' + totalYellow + ' Collab' : ''}${totalRed > 0 ? ' +' + totalRed + ' vyřazeno' : ''} · ${ref.monthKey}${state.lastFetched ? ' · ' + new Date(state.lastFetched).toLocaleTimeString('cs-CZ', {hour:'2-digit',minute:'2-digit'}) : ''}`
+        : "Klikni na Načíst z Pipedrive";
+
+      els.fileBadge.textContent = hasData ? `${totalOrange + totalYellow + totalRed} aktivit` : "0 aktivit";
+
+      syncTeamGoalControls(sumKpi);
+
+      renderTable(people, allPeople, ref, {
+        teamFte, teamCreditedOrange, teamCreditedYellow, teamKpi, sumKpi, teamPaceOrange,
+      });
+
+      if (currentPage === "dashboard") {
+        els.emptyState.classList.toggle("hidden", hasData);
+        els.results.classList.toggle("hidden", !hasData);
+        if (!hasData) return;
+
+        const teamStatusO = statusForPace(teamPaceOrange);
+        const teamStatusY = statusForPace(teamPaceYellow);
+        const kpiHint = state.teamGoalMode === "manual"
+          ? `manuální cíl ${formatNum(teamKpi, 0)} (součet ${formatNum(sumKpi, 1)})`
+          : `z celkového KPI ${formatNum(teamKpi, 1)}`;
+
+        els.summaryGrid.innerHTML = `
+          <div class="stat-card">
+            <div class="stat-label">Team pace</div>
+            <div class="stat-value">${formatPct(teamPaceOrange)}</div>
+            <div class="stat-hint">
+              <span class="badge ${teamStatusO.className}">${teamStatusO.label}</span>
+              · ${teamCreditedOrange} / ${formatNum(teamExpected, 1)} k dni
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Team pace (vše)</div>
+            <div class="stat-value">${formatPct(teamPaceYellow)}</div>
+            <div class="stat-hint">
+              <span class="badge ${teamStatusY.className}">${teamStatusY.label}</span>
+              · ${teamCreditedYellow} / ${formatNum(teamExpected, 1)} k dni
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Team month</div>
+            <div class="stat-value">${formatPct(teamMonthOrange)}</div>
+            <div class="stat-hint">${kpiHint}</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Expected k datu</div>
+            <div class="stat-value">${formatNum(teamExpected, 1)}</div>
+            <div class="stat-hint">FTE celkem ${formatNum(teamFte, 2)}</div>
+          </div>
+        `;
+
+        renderPeopleCards(people);
+      }
+    }
+
+    function buildSlackReport(data) {
+      const { ref, people, teamCreditedOrange, teamCreditedYellow, teamExpected, teamPaceOrange, teamPaceYellow, teamKpi, sumKpi } = data;
+      const teamLabel = statusForPace(teamPaceOrange).label;
+      const goalLine = state.teamGoalMode === "manual"
+        ? `KPI cíl: *${formatNum(teamKpi, 0)}* _(manuální, součet ${formatNum(sumKpi, 1)})_`
+        : `KPI cíl: *${formatNum(teamKpi, 1)}* _(součet jednotlivců)_`;
+
+      const lines = [
+        `*Presales KPI — ${formatDateCs(ref.date)}*`,
+        `Den *${ref.day}/${ref.n}* · plnění vs. expected k datu`,
+        ``,
+        `*Tým*`,
+        `• 🟠 Pace: *${formatPct(teamPaceOrange)}* (${teamLabel}) — ${teamCreditedOrange} / expected ${formatNum(teamExpected, 1)}`,
+        `• 🟡 Pace: *${formatPct(teamPaceYellow)}* — ${teamCreditedYellow} / expected ${formatNum(teamExpected, 1)}`,
+        `• ${goalLine}`,
+        ``,
+        `*Jednotlivci*`,
+      ];
+
+      const sorted = [...people].sort((a, b) => {
+        const ap = Number.isFinite(a.paceOrange) ? a.paceOrange : -1;
+        const bp = Number.isFinite(b.paceOrange) ? b.paceOrange : -1;
+        return bp - ap;
+      });
+
+      for (const p of sorted) {
+        const stO = statusForPace(p.paceOrange).label;
+        lines.push(`• *${p.name}* *${formatPct(p.paceOrange)}* (${stO}) · 🟡 *${formatPct(p.paceYellow)}*`);
+        lines.push(`   Filtr: ${p.actualOrange} / vše: ${p.actualYellow} actual · expected ${formatNum(p.expected, 1)} · KPI ${formatNum(p.kpi, 0)}`);
+        lines.push(``);
+      }
+
+      lines.push(`_Expected = KPI × (${ref.day}/${ref.n})_`);
+      lines.push(`_Filtr = bez Auto Mailing, Web Forms, Marketplace, Collab_`);
+      return lines.join("\n");
+    }
+
+    function openSlackModal() {
+      if (!state.activities.length) { alert("Nejdřív načti data z Pipedrive."); return; }
+      const text = buildSlackReport(compute());
+      els.slackReportText.value = text;
+      els.slackCopyStatus.classList.add("hidden");
+      els.slackModal.classList.remove("hidden");
+      els.slackReportText.focus();
+      els.slackReportText.select();
+    }
+
+    function closeSlackModal() { els.slackModal.classList.add("hidden"); }
+
+    async function copySlackReport() {
+      const text = els.slackReportText.value;
+      try { await navigator.clipboard.writeText(text); } catch {
+        els.slackReportText.focus(); els.slackReportText.select(); document.execCommand("copy");
+      }
+      els.slackCopyStatus.classList.remove("hidden");
+      setTimeout(() => els.slackCopyStatus.classList.add("hidden"), 2000);
+    }
+
+    function setPage(page) {
+      currentPage = page;
+      const isDash = page === "dashboard";
+      els.pageDashboard.classList.toggle("hidden", !isDash);
+      els.pageSettings.classList.toggle("hidden", isDash);
+      els.navDashboard.classList.toggle("active", isDash);
+      els.navSettings.classList.toggle("active", !isDash);
+      render();
+    }
+
+    function onTableChange(e) {
+      const target = e.target;
+      if (!(target instanceof HTMLInputElement || target instanceof HTMLSelectElement || target instanceof HTMLButtonElement)) return;
+      const field = target.dataset.field;
+      if (!field) return;
+      const row = target.closest("tr");
+      if (!row) return;
+      const name = row.dataset.name;
+      if (!name || !state.people[name]) return;
+
+      const cfg = { ...state.people[name] };
+
+      if (field === "mode") {
+        const mode = target.value === "fte_to_kpi" ? "fte_to_kpi" : "kpi_to_fte";
+        const resolved = resolvePerson(name, cfg, state.meetingsPerFte);
+        if (mode === "fte_to_kpi") {
+          state.people[name] = { ...cfg, mode, fte: resolved.fte };
+        } else {
+          state.people[name] = { ...cfg, mode, kpi: resolved.kpi };
+        }
+      } else if (field === "kpi") {
+        const kpi = Number(target.value);
+        state.people[name] = { ...cfg, mode: "kpi_to_fte", kpi: Number.isFinite(kpi) ? kpi : 0 };
+      } else if (field === "fte") {
+        const fte = Number(target.value);
+        state.people[name] = { ...cfg, mode: "fte_to_kpi", fte: Number.isFinite(fte) ? fte : 0 };
+      } else if (field === "hidden") {
+        state.people[name] = { ...cfg, hidden: !cfg.hidden };
+      }
+
+      saveState();
+      render();
+    }
+
+    // ── Detail Modal ──────────────────────────────────────────────────────
+
+    function openDetailModal(personName) {
+      const ref = getReferenceParts();
+      const monthKey = ref.monthKey;
+
+      const acts = state.activities
+        .filter(a => a.assigned === personName && a.addTime.startsWith(monthKey))
+        .sort((a, b) => a.addTime.localeCompare(b.addTime));
+
+      const orangeCount = acts.filter(a => a.orange).length;
+      els.detailModalTitle.textContent = personName;
+      els.detailModalHint.textContent = `${acts.length} aktivit v ${monthKey} · ${orangeCount} filtrovaných (oranžová) · ${acts.length} celkem`;
+
+      els.detailList.innerHTML = acts.map(a => {
+        const date = a.addTime.slice(0, 10);
+        const cat = a.category || "orange";
+        const dotClass = cat === "orange" ? "dot-orange" : cat === "yellow" ? "dot-yellow" : "dot-red";
+        const dotTitle = cat === "orange" ? "Projde filtrem" : cat === "yellow" ? "Collab (marketing)" : "Vyfiltrováno (Auto Mailing / Web Forms / Marketplace)";
+        return `
+          <div class="detail-item">
+            <span class="detail-date">${escapeHtml(date)}</span>
+            <div>
+              <div class="detail-subject">${escapeHtml(a.subject || "—")}</div>
+              ${a.dealTitle ? `<div class="detail-deal">${escapeHtml(a.dealTitle)}</div>` : ""}
+            </div>
+            <div class="detail-filter-dot ${dotClass}" title="${dotTitle}"></div>
+          </div>
+        `;
+      }).join("") || '<p style="color:var(--color-text-secondary);padding:16px 0">Žádné aktivity v tomto měsíci.</p>';
+
+      document.getElementById("detailModal").classList.remove("hidden");
+    }
+
+    function closeDetailModal() {
+      document.getElementById("detailModal").classList.add("hidden");
+    }
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+
+    state = loadState();
+    if (!state.refDate) state.refDate = toISODate(new Date());
+    els.refDate.value = state.refDate;
+
+    els.fetchBtn.addEventListener("click", fetchFromPipedrive);
+    document.getElementById("fetchBtnEmpty").addEventListener("click", fetchFromPipedrive);
+    els.exportSlackBtn.addEventListener("click", openSlackModal);
+    els.slackModalClose.addEventListener("click", closeSlackModal);
+    els.slackCopyBtn.addEventListener("click", copySlackReport);
+    els.slackModal.addEventListener("click", (e) => { if (e.target === els.slackModal) closeSlackModal(); });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !els.slackModal.classList.contains("hidden")) closeSlackModal();
+    });
+    els.refDate.addEventListener("change", () => {
+      state.refDate = els.refDate.value;
+      saveState();
+      // Re-fetch when month changes
+      const oldMonth = state.lastFetched ? new Date(state.lastFetched).toISOString().slice(0, 7) : null;
+      const newMonth = state.refDate.slice(0, 7);
+      if (!state.activities.length || oldMonth !== newMonth) {
+        fetchFromPipedrive();
+      } else {
+        render();
+      }
+    });
+    els.fteSlider.addEventListener("input", () => {
+      state.meetingsPerFte = Number(els.fteSlider.value) || 30;
+      for (const [name, cfg] of Object.entries(state.people)) {
+        const resolved = resolvePerson(name, cfg, state.meetingsPerFte);
+        if (cfg.mode === "fte_to_kpi") {
+          state.people[name] = { ...cfg, fte: resolved.fte };
+        } else {
+          state.people[name] = { ...cfg, kpi: resolved.kpi };
+        }
+      }
+      els.fteSliderValue.textContent = `${state.meetingsPerFte} Transfered`;
+      saveState();
+      render();
+    });
+    els.teamGoalMode.addEventListener("change", () => {
+      state.teamGoalMode = els.teamGoalMode.value === "manual" ? "manual" : "auto";
+      if (state.teamGoalMode === "manual" && !Number(state.teamGoalManual)) {
+        const data = compute();
+        state.teamGoalManual = Math.round(data.sumKpi) || 75;
+      }
+      saveState();
+      render();
+    });
+    els.teamGoalManual.addEventListener("change", () => {
+      const val = Number(els.teamGoalManual.value);
+      state.teamGoalManual = Number.isFinite(val) ? val : 0;
+      state.teamGoalMode = "manual";
+      saveState();
+      render();
+    });
+    document.getElementById("detailModalClose").addEventListener("click", closeDetailModal);
+    document.getElementById("detailModal").addEventListener("click", (e) => {
+      if (e.target === document.getElementById("detailModal")) closeDetailModal();
+    });
+    els.peopleGrid.addEventListener("click", (e) => {
+      const card = e.target.closest("[data-person]");
+      if (card) openDetailModal(card.dataset.person);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !document.getElementById("detailModal").classList.contains("hidden")) closeDetailModal();
+    });
+    els.navDashboard.addEventListener("click", () => setPage("dashboard"));
+    els.navSettings.addEventListener("click", () => setPage("settings"));
+    els.teamTableBody.addEventListener("change", onTableChange);
+    els.teamTableBody.addEventListener("click", onTableChange);
+
+    render();
+
+    // Auto-fetch on load if data is stale (older than 5 min) or missing
+    const ageMs = state.lastFetched ? Date.now() - new Date(state.lastFetched).getTime() : Infinity;
+    if (ageMs > 5 * 60 * 1000) {
+      fetchFromPipedrive();
+    }
+  </script>
+</body>
+</html>
