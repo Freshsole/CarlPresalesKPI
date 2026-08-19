@@ -854,6 +854,9 @@
             <h1>Nastavení týmu</h1>
             <p class="subtitle">Úvazek, KPI cíle a režim výpočtu pro každého</p>
           </div>
+          <div class="actions">
+            <button type="button" class="btn-action" id="changeTokenBtn">Změnit API token</button>
+          </div>
         </div>
 
         <section class="settings-card">
@@ -934,7 +937,7 @@
 
   <script>
     const STORAGE_KEY = "carl-presales-kpi-v2";
-    const PD_TOKEN = "bb9dd36c8d41477897c6bd82c0fea567119028b8";
+    let PD_TOKEN = ""; // loaded from localStorage or prompt
     const PD_BASE = "https://carldatacompany.pipedrive.com/api";
 
     // Orange filter: exclude these channel_ids
@@ -1533,7 +1536,7 @@
           <div class="stat-card">
             <div class="stat-label">Expected k datu</div>
             <div class="stat-value">${formatNum(teamExpected, 1)}</div>
-            <div class="stat-hint">FTE celkem ${formatNum(teamFte, 2)}</div>
+            <div class="stat-hint">Skutečný součet ${teamCreditedOrange + teamCreditedYellow} (s Collab, bez junk)</div>
           </div>
         `;
 
@@ -1683,6 +1686,13 @@
 
     // ── Init ──────────────────────────────────────────────────────────────────
 
+    // Load or prompt for API token
+    PD_TOKEN = localStorage.getItem("carl-pd-token") || "";
+    if (!PD_TOKEN) {
+      PD_TOKEN = (prompt("Zadej Pipedrive API token:") || "").trim();
+      if (PD_TOKEN) localStorage.setItem("carl-pd-token", PD_TOKEN);
+    }
+
     state = loadState();
     if (!state.refDate) state.refDate = toISODate(new Date());
     els.refDate.value = state.refDate;
@@ -1748,6 +1758,10 @@
     });
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape" && !document.getElementById("detailModal").classList.contains("hidden")) closeDetailModal();
+    });
+    document.getElementById("changeTokenBtn").addEventListener("click", () => {
+      const t = (prompt("Zadej nový Pipedrive API token:", PD_TOKEN) || "").trim();
+      if (t) { PD_TOKEN = t; localStorage.setItem("carl-pd-token", PD_TOKEN); }
     });
     els.navDashboard.addEventListener("click", () => setPage("dashboard"));
     els.navSettings.addEventListener("click", () => setPage("settings"));
